@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen Kelas - LKP Indo Jaya</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="flex h-screen overflow-hidden">
+        
+        <aside class="w-64 bg-green-900 text-white flex-shrink-0 hidden md:block">
+            <div class="p-6 flex items-center justify-center border-b border-green-800">
+                <div class="text-center">
+                    <div class="bg-white text-green-900 w-10 h-10 rounded-full flex items-center justify-center mx-auto mb-2 font-bold">NU</div>
+                    <h1 class="text-lg font-bold tracking-wider">LKP INDO JAYA</h1>
+                </div>
+            </div>
+            <nav class="mt-6 px-4 space-y-2">
+                <a href="Dashboard.html" class="flex items-center py-3 px-4 rounded transition hover:bg-green-800 text-gray-300">
+                    <i class="fas fa-th-large w-6"></i> <span>Dashboard</span>
+                </a>
+                <p class="text-xs text-green-400 uppercase font-semibold mt-6 mb-2 px-4">Operasional</p>
+                <a href="#" class="flex items-center py-3 px-4 rounded bg-green-800 border-l-4 border-yellow-400 text-white">
+                    <i class="fas fa-chalkboard-teacher w-6"></i> <span class="font-medium">Manajemen Kelas</span>
+                </a>
+            </nav>
+        </aside>
+
+        <div class="flex-1 flex flex-col overflow-hidden">
+            
+            <header class="bg-white shadow-sm border-b h-16 flex items-center justify-between px-8">
+                <h2 class="text-xl font-bold text-gray-700">Daftar Kelas & Jadwal</h2>
+                <button class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium shadow hover:bg-green-700">
+                    <i class="fas fa-plus mr-2"></i> Buat Kelas Baru
+                </button>
+            </header>
+
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-8">
+              <div class="mb-2 text-sm text-gray-500 font-semibold uppercase tracking-wide mt-8">
+                    Kelas Aktif
+                </div>
+
+                <div class="bg-white rounded-lg shadow overflow-hidden">
+                    <table class="min-w-full leading-normal">
+                        <tbody class="text-gray-600 text-sm">
+                            <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                <td class="py-4 px-6 w-1/3">
+                                    <div class="flex flex-col">
+                                        <span class="font-bold text-gray-800">Web Design Pagi</span>
+                                        <span class="text-xs text-purple-600 bg-purple-100 px-2 py-0.5 rounded w-max mt-1">Pemrograman</span>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-6">
+                                    <div class="flex items-center">
+                                        <div class="bg-purple-100 text-purple-800 w-8 h-8 rounded-full flex items-center justify-center mr-2 font-bold text-xs">NN</div>
+                                        <div>
+                                            <span class="block font-medium text-gray-800">Nanda Nurfaiz</span>
+                                            <span class="text-xs text-green-600 font-bold">Aktif s.d 28 Feb</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-6 text-center">
+                                    <span class="bg-green-200 text-green-700 py-1 px-3 rounded-full text-xs font-bold">Aktif</span>
+                                </td>
+                                <td class="py-4 px-6 text-center">
+                                    <button class="text-blue-600 hover:text-blue-800 mx-1" title="Ganti Pengajar"><i class="fas fa-exchange-alt"></i></button>
+                                    <button class="text-yellow-600 hover:text-yellow-800 mx-1" title="Edit Info"><i class="fas fa-pencil-alt"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <br><br><br>
+                
+                <div class="mb-2 text-sm text-gray-500 font-semibold uppercase tracking-wide">
+                    Kelas Gabungan
+                </div>
+                
+                <div class="bg-white rounded-lg shadow overflow-hidden mb-8">
+                    <table class="min-w-full leading-normal">
+                        <thead>
+                            <tr class="bg-gray-100 text-gray-600 uppercase text-xs leading-normal">
+                                <th class="py-3 px-6 text-left">Nama Kelas</th>
+                                <th class="py-3 px-6 text-left">Instruktur Aktif</th>
+                                <th class="py-3 px-6 text-center">Status Operasional</th>
+                                <th class="py-3 px-6 text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-600 text-sm">
+                            
+                            <tr class="border-b border-gray-200 hover:bg-green-50">
+                                <td class="py-4 px-6">
+                                    <div class="flex flex-col">
+                                        <div class="flex items-center gap-2">
+                                            <span class="font-bold text-gray-800 text-base">Teknisi Jaringan (Gabungan)</span>
+                                            <span class="bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded font-bold">Active</span>
+                                        </div>
+                                        <span class="text-xs text-green-600 mt-1">
+                                            <i class="fas fa-info-circle"></i> Menampung siswa dari Kelas A & B
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-6">
+                                    <div class="flex items-center">
+                                        <div class="bg-blue-100 text-blue-800 w-8 h-8 rounded-full flex items-center justify-center mr-2 font-bold text-xs">BS</div>
+                                        <div>
+                                            <span class="block font-medium text-gray-800">Budi Santoso</span>
+                                            <span class="text-xs text-gray-500">Periode: 01 Feb - 28 Feb</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-6 text-center">
+                                    <span class="bg-green-200 text-green-700 py-1 px-3 rounded-full text-xs font-bold">
+                                        Sedang Berjalan
+                                    </span>
+                                </td>
+                                <td class="py-4 px-6 text-center">
+                                    <div class="flex justify-center gap-2">
+                                        <button class="text-blue-600 hover:text-blue-800" title="Atur Jadwal / Rolling">
+                                            <i class="fas fa-exchange-alt"></i>
+                                        </button>
+                                        <button class="text-gray-500 hover:text-gray-700" title="Lihat Siswa">
+                                            <i class="fas fa-users"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr class="border-b border-gray-200 bg-yellow-50">
+                                <td class="py-4 px-6 border-l-4 border-yellow-400">
+                                    <div class="flex flex-col opacity-75">
+                                        <span class="font-bold text-gray-700">Teknisi Jaringan A</span>
+                                        <span class="text-xs text-gray-500 mt-1">
+                                            ID: NET-001 | Program: Jaringan
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-6">
+                                    <div class="text-gray-500 italic text-xs">
+                                        Estafet ke Budi Santoso (di Kelas Gabungan)
+                                    </div>
+                                </td>
+                                <td class="py-4 px-6 text-center">
+                                    <div class="inline-flex items-center bg-yellow-100 border border-yellow-200 text-yellow-800 px-3 py-1 rounded-full text-xs font-bold shadow-sm">
+                                        <i class="fas fa-share mr-2"></i>
+                                        Dialihkan ke Kls Gabungan
+                                    </div>
+                                    <div class="text-xs text-gray-400 mt-1">Per tanggal 15 Feb</div>
+                                </td>
+                                <td class="py-4 px-6 text-center">
+                                    <button class="text-gray-400 cursor-not-allowed" disabled title="Jadwal Dikunci">
+                                        <i class="fas fa-lock"></i>
+                                    </button>
+                                    <button class="ml-2 text-blue-600 hover:text-blue-800 text-xs underline">
+                                        Lihat History
+                                    </button>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+                
+
+            </main>
+        </div>
+    </div>
+</body>
+</html>

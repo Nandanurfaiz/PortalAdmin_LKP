@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jadwal Program - LKP Indo Jaya</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .sidebar-active { background-color: rgba(255,255,255,0.1); border-left: 4px solid #FCD34D; }
+        .modal { transition: opacity 0.25s ease; }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="flex h-screen overflow-hidden">
+        
+        <aside class="w-64 bg-green-900 text-white flex-shrink-0 hidden md:block">
+            <div class="p-6 flex items-center justify-center border-b border-green-800">
+                <div class="text-center">
+                    <div class="bg-white text-green-900 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2 text-xl font-bold">NU</div>
+                    <h1 class="text-lg font-bold tracking-wider">LKP INDO JAYA</h1>
+                </div>
+            </div>
+            <nav class="mt-6 px-4 space-y-2">
+                <a href="Dashboard.html" class="flex items-center py-3 px-4 rounded transition hover:bg-green-800 text-gray-300 hover:text-white">
+                    <i class="fas fa-th-large w-6"></i> <span>Dashboard</span>
+                </a>
+                
+                <p class="text-xs text-green-400 uppercase font-semibold mt-6 mb-2 px-4">Operasional</p>
+                
+                <a href="manajemen-kelas-v2.html" class="flex items-center py-3 px-4 rounded transition hover:bg-green-800 text-gray-300 hover:text-white">
+                    <i class="fas fa-chalkboard-teacher w-6"></i> <span>Manajemen Kelas</span>
+                </a>
+                <a href="data-instruktur-v2.html" class="flex items-center py-3 px-4 rounded transition hover:bg-green-800 text-gray-300 hover:text-white">
+                    <i class="fas fa-users-cog w-6"></i> <span>Data Instruktur</span>
+                </a>
+                <a href="#" class="sidebar-active flex items-center py-3 px-4 rounded transition hover:bg-green-800">
+                    <i class="fas fa-calendar-alt w-6"></i> <span class="font-medium">Jadwal Program</span>
+                </a>
+                
+                <p class="text-xs text-green-400 uppercase font-semibold mt-6 mb-2 px-4">Laporan</p>
+                <a href="#" class="flex items-center py-3 px-4 rounded transition hover:bg-green-800 text-gray-300 hover:text-white">
+                    <i class="fas fa-file-alt w-6"></i> <span>Rekap Jurnal</span>
+                </a>
+            </nav>
+        </aside>
+
+        <div class="flex-1 flex flex-col overflow-hidden">
+            
+            <header class="bg-white shadow-sm border-b h-16 flex items-center justify-between px-8">
+                <h2 class="text-xl font-bold text-gray-700">Agenda Kegiatan</h2>
+                <div class="flex items-center gap-4">
+                    <button onclick="document.getElementById('modalAddSchedule').classList.remove('hidden')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium shadow transition flex items-center">
+                        <i class="fas fa-plus mr-2"></i> Tambah Jadwal Manual
+                    </button>
+                </div>
+            </header>
+
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-6 md:p-8">
+                
+                <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 bg-white p-3 rounded-lg shadow-sm border border-gray-100">
+                    <div class="flex items-center gap-2">
+                        <span class="text-gray-500 text-sm font-semibold mr-2">Tampilkan:</span>
+                        <button id="btnMinggu" onclick="switchView('minggu')" class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold border border-green-200 transition">Minggu Ini</button>
+                        <button id="btnBulan" onclick="switchView('bulan')" class="px-3 py-1 text-gray-500 hover:bg-gray-100 rounded-full text-xs font-medium transition">Bulan Ini</button>
+                    </div>
+                    
+                    <div class="relative w-full md:w-64">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fas fa-search"></i></span>
+                        <input type="text" class="w-full py-2 pl-10 pr-4 text-sm border-none bg-gray-50 rounded focus:ring-0" placeholder="Cari kelas atau instruktur...">
+                    </div>
+                </div>
+
+                <div id="viewMinggu" class="max-w-4xl mx-auto fade-in">
+                    
+                    <div class="mb-8">
+                        <div class="flex items-center mb-4">
+                            <h3 class="text-lg font-bold text-gray-800 mr-3">Hari Ini</h3>
+                            <span class="text-gray-500 text-sm font-medium">Selasa, 15 Januari 2026</span>
+                            <span class="ml-auto bg-green-100 text-green-800 text-xs px-2 py-1 rounded font-bold">2 Sesi Aktif</span>
+                        </div>
+
+                        <div class="space-y-3">
+                            <div onclick="openDetailModal()" class="group relative bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition cursor-pointer overflow-hidden">
+                                <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-blue-500"></div>
+                                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pl-2">
+                                    <div class="min-w-[100px]">
+                                        <p class="text-xl font-bold text-gray-800">08:00</p>
+                                        <p class="text-xs text-gray-500">s.d 10:00 WIB</p>
+                                        <span class="mt-2 inline-block bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded-full animate-pulse">● Berlangsung</span>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h4 class="font-bold text-gray-800 text-lg group-hover:text-blue-600 transition">Jaringan Dasar (Pagi)</h4>
+                                        <p class="text-sm text-gray-500 mb-1">Pertemuan ke-4: Crimping Kabel UTP</p>
+                                        <div class="flex items-center gap-3 text-xs text-gray-500">
+                                            <span class="flex items-center gap-1"><i class="fas fa-layer-group"></i> Jaringan</span>
+                                        </div>
+                                    </div>
+                                    <div class="text-left md:text-right min-w-[150px] border-t md:border-t-0 md:border-l border-gray-100 pt-3 md:pt-0 md:pl-4">
+                                        <p class="text-xs text-gray-400 mb-1">Instruktur</p>
+                                        <div class="flex items-center md:justify-end gap-2">
+                                            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xs font-bold">BS</div>
+                                            <span class="text-sm font-medium text-gray-700">Budi Santoso</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div onclick="openDetailModal()" class="group relative bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition cursor-pointer overflow-hidden opacity-90 hover:opacity-100">
+                                <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-purple-500"></div>
+                                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pl-2">
+                                    <div class="min-w-[100px]">
+                                        <p class="text-xl font-bold text-gray-400">13:00</p>
+                                        <p class="text-xs text-gray-400">s.d 15:00 WIB</p>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h4 class="font-bold text-gray-700 text-lg group-hover:text-purple-600 transition">Desain Grafis Batch 1</h4>
+                                        <p class="text-sm text-gray-500 mb-1">Pertemuan ke-2: Pengenalan CorelDraw</p>
+                                        <div class="flex items-center gap-3 text-xs text-gray-500">
+                                            <span class="flex items-center gap-1"><i class="fas fa-layer-group"></i> Desain</span>
+                                        </div>
+                                    </div>
+                                    <div class="text-left md:text-right min-w-[150px] border-t md:border-t-0 md:border-l border-gray-100 pt-3 md:pt-0 md:pl-4">
+                                        <p class="text-xs text-gray-400 mb-1">Instruktur</p>
+                                        <div class="flex items-center md:justify-end gap-2">
+                                            <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 text-xs font-bold">NN</div>
+                                            <span class="text-sm font-medium text-gray-700">Nanda Nurfaiz</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <div class="flex items-center mb-4">
+                            <h3 class="text-md font-bold text-gray-500 mr-3">Besok</h3>
+                            <span class="text-gray-400 text-sm">Rabu, 16 Januari 2026</span>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="group relative bg-white p-4 rounded-lg border border-gray-200 hover:border-green-300 transition cursor-pointer pl-2">
+                                <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-green-500 rounded-l-lg"></div>
+                                <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 pl-3">
+                                    <div class="w-24 text-gray-700 font-bold">09:00 WIB</div>
+                                    <div class="flex-1">
+                                        <span class="font-bold text-gray-700">Web Development (Sore)</span>
+                                    </div>
+                                    <div class="text-sm text-gray-500"><i class="fas fa-user mr-1 text-gray-400"></i> Siti Aminah</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="viewBulan" class="hidden h-full fade-in flex flex-col">
+                    <div class="flex justify-between items-center mb-4 bg-white p-2 rounded shadow-sm border">
+                        <button class="px-3 py-1 hover:bg-gray-100 rounded"><i class="fas fa-chevron-left"></i></button>
+                        <span class="font-bold text-lg text-gray-800">Januari 2026</span>
+                        <button class="px-3 py-1 hover:bg-gray-100 rounded"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+
+                    <div class="flex-1 bg-white rounded-lg shadow border border-gray-200 flex flex-col overflow-hidden min-h-[600px]">
+                        <div class="grid grid-cols-7 bg-gray-50 border-b border-gray-200">
+                            <div class="py-2 text-center text-sm font-semibold text-gray-600">Minggu</div>
+                            <div class="py-2 text-center text-sm font-semibold text-gray-600">Senin</div>
+                            <div class="py-2 text-center text-sm font-semibold text-gray-600">Selasa</div>
+                            <div class="py-2 text-center text-sm font-semibold text-gray-600">Rabu</div>
+                            <div class="py-2 text-center text-sm font-semibold text-gray-600">Kamis</div>
+                            <div class="py-2 text-center text-sm font-semibold text-gray-600">Jumat</div>
+                            <div class="py-2 text-center text-sm font-semibold text-gray-600">Sabtu</div>
+                        </div>
+
+                        <div class="grid grid-cols-7 grid-rows-5 flex-1 bg-white">
+                            <div class="border border-gray-100 p-2 text-gray-300 bg-gray-50">29</div>
+                            <div class="border border-gray-100 p-2 text-gray-300 bg-gray-50">30</div>
+                            <div class="border border-gray-100 p-2 text-gray-300 bg-gray-50">31</div>
+                            
+                            <div class="border border-gray-100 p-2 bg-red-50 text-red-400 font-bold">1 <div class="text-[9px] font-normal text-red-500">Libur</div></div>
+                            <div class="border border-gray-100 p-2 hover:bg-gray-50 cursor-pointer"><span class="font-bold text-gray-700">2</span><div class="mt-1 bg-blue-100 text-blue-800 text-[9px] p-0.5 rounded border-l-2 border-blue-500">08:00 Jaringan</div></div>
+                            <div class="border border-gray-100 p-2 hover:bg-gray-50 cursor-pointer"><span class="font-bold text-gray-700">3</span><div class="mt-1 bg-green-100 text-green-800 text-[9px] p-0.5 rounded border-l-2 border-green-500">09:00 Web</div></div>
+                            <div class="border border-gray-100 p-2 hover:bg-gray-50 cursor-pointer"><span class="font-bold text-gray-700">4</span></div>
+                            
+                            <div class="border border-gray-100 p-2 text-red-400 bg-gray-50">5</div>
+                            <div class="border border-gray-100 p-2 hover:bg-gray-50 cursor-pointer"><span class="font-bold text-gray-700">6</span><div class="mt-1 bg-blue-100 text-blue-800 text-[9px] p-0.5 rounded border-l-2 border-blue-500">08:00 Jaringan</div></div>
+                            <div class="border border-gray-100 p-2 hover:bg-gray-50 cursor-pointer"><span class="font-bold text-gray-700">7</span><div class="mt-1 bg-purple-100 text-purple-800 text-[9px] p-0.5 rounded border-l-2 border-purple-500">13:00 Desain</div></div>
+                            <div class="border border-gray-100 p-2 hover:bg-gray-50 cursor-pointer"><span class="font-bold text-gray-700">8</span></div>
+                            <div class="border border-gray-100 p-2 hover:bg-gray-50 cursor-pointer"><span class="font-bold text-gray-700">9</span></div>
+                            <div class="border border-gray-100 p-2 hover:bg-gray-50 cursor-pointer"><span class="font-bold text-gray-700">10</span></div>
+                            <div class="border border-gray-100 p-2 hover:bg-gray-50 cursor-pointer"><span class="font-bold text-gray-700">11</span></div>
+
+                            <div class="border border-gray-100 p-2 text-red-400 bg-gray-50">12</div>
+                            <div class="border border-gray-100 p-2 hover:bg-gray-50 cursor-pointer"><span class="font-bold text-gray-700">13</span></div>
+                            <div class="border border-gray-100 p-2 hover:bg-gray-50 cursor-pointer"><span class="font-bold text-gray-700">14</span></div>
+                            <div class="border border-blue-200 bg-blue-50 p-2 cursor-pointer">
+                                <span class="bg-blue-600 text-white w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold">15</span>
+                                <div class="mt-1 bg-blue-100 text-blue-800 text-[9px] p-0.5 rounded border-l-2 border-blue-500">08:00 Jaringan</div>
+                                <div class="mt-1 bg-purple-100 text-purple-800 text-[9px] p-0.5 rounded border-l-2 border-purple-500">13:00 Desain</div>
+                            </div>
+                            <div class="border border-gray-100 p-2 hover:bg-gray-50 cursor-pointer"><span class="font-bold text-gray-700">16</span><div class="mt-1 bg-green-100 text-green-800 text-[9px] p-0.5 rounded border-l-2 border-green-500">09:00 Web</div></div>
+                            <div class="border border-gray-100 p-2 hover:bg-gray-50 cursor-pointer"><span class="font-bold text-gray-700">17</span></div>
+                            <div class="border border-gray-100 p-2 hover:bg-gray-50 cursor-pointer"><span class="font-bold text-gray-700">18</span></div>
+                            
+                            <div class="border border-gray-100 p-2 text-red-400 bg-gray-50">19</div>
+                            <div class="border border-gray-100 p-2 text-gray-700">20</div>
+                            <div class="border border-gray-100 p-2 text-gray-700">21</div>
+                            <div class="border border-gray-100 p-2 text-gray-700">22</div>
+                            <div class="border border-gray-100 p-2 text-gray-700">23</div>
+                            <div class="border border-gray-100 p-2 text-gray-700">24</div>
+                            <div class="border border-gray-100 p-2 text-gray-700">25</div>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <div id="modalDetailJadwal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50 modal">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-sm overflow-hidden transform transition-all">
+            <div class="h-2 bg-blue-500 w-full"></div>
+            <div class="p-6">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <span class="bg-blue-50 text-blue-700 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide">Program Jaringan</span>
+                        <h3 class="text-xl font-bold text-gray-800 mt-2 leading-tight">Jaringan Dasar (Pagi)</h3>
+                    </div>
+                    <button onclick="document.getElementById('modalDetailJadwal').classList.add('hidden')" class="text-gray-400 hover:text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-full w-8 h-8 flex items-center justify-center transition">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="space-y-4 text-sm">
+                    <div class="flex items-center text-gray-600 bg-gray-50 p-3 rounded-lg">
+                        <i class="far fa-clock w-6 text-center text-blue-500"></i>
+                        <span class="font-semibold mr-2">08:00 - 10:00</span>
+                        <span class="text-gray-400">(2 Jam)</span>
+                    </div>
+                    <div class="flex items-center text-gray-600"><i class="fas fa-calendar-day w-6 text-center text-gray-400"></i> <span>Selasa, 15 Januari 2026</span></div>
+                    <div class="flex items-center text-gray-600"><i class="fas fa-user-tie w-6 text-center text-gray-400"></i> <span>Instruktur: <b class="text-gray-800">Budi Santoso</b></span></div>
+                </div>
+                <div class="mt-8 grid grid-cols-2 gap-3">
+                    <button class="w-full py-2.5 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-50 text-sm font-medium transition">Edit</button>
+                    <button class="w-full py-2.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-sm font-medium shadow-md transition">Lihat Absensi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalAddSchedule" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50 modal">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md overflow-hidden animate-fade-in-down">
+            <div class="bg-gray-50 px-6 py-4 border-b flex justify-between items-center">
+                <h3 class="font-bold text-gray-800">Tambah Jadwal Manual</h3>
+                <button onclick="document.getElementById('modalAddSchedule').classList.add('hidden')" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="p-6">
+                <form>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Pilih Kelas</label>
+                        <select class="w-full border border-gray-300 rounded py-2 px-3 text-gray-700 focus:outline-none focus:border-green-500">
+                            <option value="">-- Pilih Kelas Aktif --</option>
+                            <option>Jaringan Dasar (Pagi)</option>
+                            <option>Desain Grafis Batch 1</option>
+                            <option>Web Development (Sore)</option>
+                            <option>Workshop Sablon</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Instruktur</label>
+                        <select class="w-full border border-gray-300 rounded py-2 px-3 text-gray-700 focus:outline-none focus:border-green-500">
+                            <option>Budi Santoso</option>
+                            <option>Nanda Nurfaiz</option>
+                            <option>Siti Aminah</option>
+                            <option>Agus Mustofa</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Tanggal</label>
+                        <input type="date" class="w-full border border-gray-300 rounded py-2 px-3 focus:outline-none focus:border-green-500">
+                    </div>
+
+                    <div class="flex gap-4 mb-4">
+                        <div class="w-1/2">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Jam Mulai</label>
+                            <input type="time" class="w-full border border-gray-300 rounded py-2 px-3 focus:outline-none focus:border-green-500">
+                        </div>
+                        <div class="w-1/2">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Jam Selesai</label>
+                            <input type="time" class="w-full border border-gray-300 rounded py-2 px-3 focus:outline-none focus:border-green-500">
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Topik / Keterangan (Opsional)</label>
+                        <input type="text" placeholder="Cth: Sesi Tambahan / Ujian Praktek" class="w-full border border-gray-300 rounded py-2 px-3 focus:outline-none focus:border-green-500">
+                    </div>
+
+                    <div class="flex items-center justify-end gap-3">
+                        <button type="button" onclick="document.getElementById('modalAddSchedule').classList.add('hidden')" class="px-4 py-2 text-gray-500 hover:bg-gray-100 rounded">Batal</button>
+                        <button type="button" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 shadow">Simpan Jadwal</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchView(viewName) {
+            const viewMinggu = document.getElementById('viewMinggu');
+            const viewBulan = document.getElementById('viewBulan');
+            const btnMinggu = document.getElementById('btnMinggu');
+            const btnBulan = document.getElementById('btnBulan');
+
+            if (viewName === 'minggu') {
+                viewMinggu.classList.remove('hidden');
+                viewBulan.classList.add('hidden');
+                
+                btnMinggu.className = "px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold border border-green-200 transition";
+                btnBulan.className = "px-3 py-1 text-gray-500 hover:bg-gray-100 rounded-full text-xs font-medium transition";
+            } else {
+                viewMinggu.classList.add('hidden');
+                viewBulan.classList.remove('hidden');
+
+                btnBulan.className = "px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold border border-green-200 transition";
+                btnMinggu.className = "px-3 py-1 text-gray-500 hover:bg-gray-100 rounded-full text-xs font-medium transition";
+            }
+        }
+
+        function openDetailModal() {
+            document.getElementById('modalDetailJadwal').classList.remove('hidden');
+        }
+    </script>
+
+</body>
+</html>
