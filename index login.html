@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Portal - LKP Indo Jaya</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        /* Animasi Fade In */
+        .fade-in { animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Dekorasi Background Blob */
+        .shape-blob {
+            position: absolute;
+            filter: blur(80px);
+            z-index: 0;
+            opacity: 0.4;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 h-screen overflow-hidden flex flex-col lg:flex-row">
+
+    <div class="lg:w-1/2 bg-slate-900 relative flex flex-col justify-between p-12 text-white overflow-hidden">
+        <div class="shape-blob bg-emerald-500 w-64 h-64 rounded-full -top-10 -left-10"></div>
+        <div class="shape-blob bg-blue-600 w-80 h-80 rounded-full bottom-0 right-0"></div>
+        
+        <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 30px 30px;"></div>
+
+        <div class="relative z-10">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 bg-emerald-500 rounded-lg flex items-center justify-center font-bold text-slate-900 shadow-lg shadow-emerald-500/50">
+                    NU
+                </div>
+                <span class="font-bold text-lg tracking-wide">LKP INDO JAYA</span>
+            </div>
+            
+            <div class="mt-20">
+                <h1 class="text-4xl lg:text-5xl font-bold leading-tight mb-6">
+                    INJA<span class="text-emerald-400">TRA</span>
+                </h1>
+                <p class="text-slate-400 text-lg max-w-md leading-relaxed">
+                    Sistem informasi manajemen pelatihan terintegrasi. Kelola jadwal, instruktur, dan laporan jurnal dalam satu platform modern.
+                </p>
+            </div>
+        </div>
+
+        <div class="relative z-10 text-sm text-slate-500 font-medium">
+            &copy; 2026 Lembaga Kursus & Pelatihan Indo Jaya
+        </div>
+    </div>
+
+    <div class="lg:w-1/2 w-full bg-white flex flex-col justify-center items-center p-8 lg:p-16 relative">
+        
+        <div id="roleSelection" class="w-full max-w-md fade-in">
+            <div class="text-center mb-10">
+                <h2 class="text-2xl font-bold text-slate-800 mb-2">Selamat Datang</h2>
+                <p class="text-slate-500">Silakan pilih peran Anda untuk melanjutkan.</p>
+            </div>
+
+            <div class="grid gap-5">
+                <div onclick="showLogin('admin')" class="group p-6 rounded-2xl border-2 border-slate-100 hover:border-emerald-500 cursor-pointer transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10 flex items-center justify-between bg-white">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl group-hover:bg-emerald-500 group-hover:text-white transition-colors duration-300">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="text-left">
+                            <h3 class="font-bold text-slate-800 text-lg">Administrator</h3>
+                            <p class="text-xs text-slate-500 group-hover:text-emerald-600 transition">Manajemen Sistem Utama</p>
+                        </div>
+                    </div>
+                    <div class="text-slate-300 group-hover:text-emerald-500 transition-transform group-hover:translate-x-1">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
+
+                <div onclick="showLogin('instructor')" class="group p-6 rounded-2xl border-2 border-slate-100 hover:border-blue-500 cursor-pointer transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 flex items-center justify-between bg-white">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-xl group-hover:bg-blue-500 group-hover:text-white transition-colors duration-300">
+                            <i class="fas fa-chalkboard-user"></i>
+                        </div>
+                        <div class="text-left">
+                            <h3 class="font-bold text-slate-800 text-lg">Instruktur</h3>
+                            <p class="text-xs text-slate-500 group-hover:text-blue-600 transition">Akses Jadwal & Jurnal</p>
+                        </div>
+                    </div>
+                    <div class="text-slate-300 group-hover:text-blue-500 transition-transform group-hover:translate-x-1">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="loginFormContainer" class="hidden w-full max-w-sm fade-in">
+            <button onclick="backToRole()" class="flex items-center text-sm text-slate-400 hover:text-slate-700 mb-8 transition">
+                <i class="fas fa-arrow-left mr-2"></i> Kembali
+            </button>
+
+            <div class="mb-8">
+                <h2 id="formTitle" class="text-3xl font-bold text-slate-800 mb-2">Login Admin</h2>
+                <p class="text-slate-500">Masukkan akun yang telah terdaftar.</p>
+            </div>
+
+            <form onsubmit="handleLogin(event)">
+                <div class="space-y-5">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Username</label>
+                        <input type="text" class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition text-slate-800 font-medium" placeholder="Masukkan Username" required>
+                    </div>
+                    
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="block text-sm font-semibold text-slate-700">Kata Sandi</label>
+                        </div>
+                        <input type="password" class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition text-slate-800" placeholder="••••••••" required>
+                        <p class="text-xs text-slate-400 mt-2 italic">
+                            *Jika lupa kata sandi, silakan hubungi Administrator untuk reset manual.
+                        </p>
+                    </div>
+
+                    <button type="submit" id="submitBtn" class="w-full bg-slate-900 text-white font-bold py-3.5 rounded-lg hover:bg-emerald-600 hover:shadow-lg hover:shadow-emerald-500/30 transition-all duration-300 transform active:scale-95" href="dashboardAdmin.html">
+                        Masuk Sistem
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        let currentRole = '';
+
+        // Fungsi saat kartu peran diklik
+        function showLogin(role) {
+            currentRole = role;
+            const roleSelection = document.getElementById('roleSelection');
+            const loginFormContainer = document.getElementById('loginFormContainer');
+            const formTitle = document.getElementById('formTitle');
+            const submitBtn = document.getElementById('submitBtn');
+
+            // Sembunyikan pilihan, tampilkan form
+            roleSelection.classList.add('hidden');
+            loginFormContainer.classList.remove('hidden');
+
+            // Ubah gaya visual sesuai peran (Admin=Hijau, Instruktur=Biru)
+            if (role === 'admin') {
+                formTitle.innerHTML = 'Login <span class="text-emerald-500">Admin</span>';
+                submitBtn.className = "w-full bg-emerald-600 text-white font-bold py-3.5 rounded-lg hover:bg-emerald-700 hover:shadow-lg hover:shadow-emerald-500/30 transition-all duration-300 transform active:scale-95";
+            } else {
+                formTitle.innerHTML = 'Login <span class="text-blue-500">Instruktur</span>';
+                submitBtn.className = "w-full bg-blue-600 text-white font-bold py-3.5 rounded-lg hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300 transform active:scale-95";
+            }
+        }
+
+        // Fungsi tombol kembali
+        function backToRole() {
+            document.getElementById('loginFormContainer').classList.add('hidden');
+            document.getElementById('roleSelection').classList.remove('hidden');
+        }
+
+        // Fungsi saat tombol login ditekan
+        function handleLogin(e) {
+            e.preventDefault();
+            // LOGIKA REDIRECT
+            if (currentRole === 'admin') {
+                window.location.href = "Dashboard.html"; // Masuk ke panel Admin yang sudah dibuat
+            } else {
+                // Karena panel instruktur belum ada, beri notifikasi sementara
+                alert("Login Instruktur Berhasil! \n(Halaman Dashboard Instruktur akan dikembangkan selanjutnya)");
+            }
+        }
+    </script>
+
+</body>
+</html>
